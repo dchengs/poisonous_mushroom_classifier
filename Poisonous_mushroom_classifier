@@ -1,0 +1,323 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "\n",
+    "#reading cleaned data\n",
+    "df = pd.read_csv(\"mushroom.csv\")\n",
+    "result = df['result']\n",
+    "#hot coding the catergorical data to 1 or 0\n",
+    "df = pd.get_dummies(df, columns=[\"cap-shape\",\"cap-color\",\"odor\",\"gill-attachment\",\"gill-spacing\",\"gill-size\",\"gill-color\",\"stalk-shape\",\"stalk-root\",\"stalk-surface-above-ring\",\"stalk-surface-below-ring\",\"stalk-color-above-ring\",\"stalk-color-below-ring\",\"veil-type\",\"veil-color\",\"ring-type\",\"spore-print-color\",\"population\",\"habitat\"])\n",
+    "df = df.drop(columns=[\"result\", \"cap-shape.1\", \"veil-type_p\"])\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "bruises : 0.501530\n",
+      "ring-number : 0.214366\n",
+      "cap-shape_b : 0.182567\n",
+      "cap-shape_c : -0.023007\n",
+      "cap-shape_f : -0.018526\n",
+      "cap-shape_k : -0.163565\n",
+      "cap-shape_s : 0.060664\n",
+      "cap-shape_x : 0.026886\n",
+      "cap-color_b : -0.067544\n",
+      "cap-color_c : 0.030910\n",
+      "cap-color_e : -0.097112\n",
+      "cap-color_g : 0.046456\n",
+      "cap-color_n : 0.044360\n",
+      "cap-color_p : -0.034702\n",
+      "cap-color_r : 0.042854\n",
+      "cap-color_u : 0.042854\n",
+      "cap-color_w : 0.133683\n",
+      "cap-color_y : -0.113014\n",
+      "odor_a : 0.219529\n",
+      "odor_c : -0.161278\n",
+      "odor_f : -0.623842\n",
+      "odor_l : 0.219529\n",
+      "odor_m : -0.069159\n",
+      "odor_n : 0.785557\n",
+      "odor_p : -0.186984\n",
+      "odor_s : -0.286360\n",
+      "odor_y : -0.286360\n",
+      "gill-attachment_a : 0.129200\n",
+      "gill-attachment_f : -0.129200\n",
+      "gill-spacing_c : -0.348387\n",
+      "gill-spacing_w : 0.348387\n",
+      "gill-size_b : 0.540024\n",
+      "gill-size_n : -0.540024\n",
+      "gill-color_b : -0.538808\n",
+      "gill-color_e : 0.105491\n",
+      "gill-color_g : -0.120285\n",
+      "gill-color_h : -0.150694\n",
+      "gill-color_k : 0.149641\n",
+      "gill-color_n : 0.288943\n",
+      "gill-color_o : 0.085962\n",
+      "gill-color_p : 0.050380\n",
+      "gill-color_r : -0.056426\n",
+      "gill-color_u : 0.195359\n",
+      "gill-color_w : 0.231316\n",
+      "gill-color_y : 0.046828\n",
+      "stalk-shape_e : -0.102019\n",
+      "stalk-shape_t : 0.102019\n",
+      "stalk-root_? : -0.302001\n",
+      "stalk-root_b : -0.017712\n",
+      "stalk-root_c : 0.218548\n",
+      "stalk-root_e : 0.202839\n",
+      "stalk-root_r : 0.150087\n",
+      "stalk-surface-above-ring_f : 0.119503\n",
+      "stalk-surface-above-ring_k : -0.587658\n",
+      "stalk-surface-above-ring_s : 0.491314\n",
+      "stalk-surface-above-ring_y : 0.016198\n",
+      "stalk-surface-below-ring_f : 0.136782\n",
+      "stalk-surface-below-ring_k : -0.573524\n",
+      "stalk-surface-below-ring_s : 0.425444\n",
+      "stalk-surface-below-ring_y : 0.081674\n",
+      "stalk-color-above-ring_b : -0.245662\n",
+      "stalk-color-above-ring_c : -0.069159\n",
+      "stalk-color-above-ring_e : 0.105491\n",
+      "stalk-color-above-ring_g : 0.266489\n",
+      "stalk-color-above-ring_n : -0.233164\n",
+      "stalk-color-above-ring_o : 0.150087\n",
+      "stalk-color-above-ring_p : -0.230277\n",
+      "stalk-color-above-ring_w : 0.217740\n",
+      "stalk-color-above-ring_y : -0.032545\n",
+      "stalk-color-below-ring_b : -0.245662\n",
+      "stalk-color-below-ring_c : -0.069159\n",
+      "stalk-color-below-ring_e : 0.105491\n",
+      "stalk-color-below-ring_g : 0.266489\n",
+      "stalk-color-below-ring_n : -0.203966\n",
+      "stalk-color-below-ring_o : 0.150087\n",
+      "stalk-color-below-ring_p : -0.230277\n",
+      "stalk-color-below-ring_w : 0.214112\n",
+      "stalk-color-below-ring_y : -0.056426\n",
+      "veil-color_n : 0.105491\n",
+      "veil-color_o : 0.105491\n",
+      "veil-color_w : -0.140541\n",
+      "veil-color_y : -0.032545\n",
+      "ring-type_e : -0.223286\n",
+      "ring-type_f : 0.074371\n",
+      "ring-type_l : -0.451619\n",
+      "ring-type_n : -0.069159\n",
+      "ring-type_p : 0.540469\n",
+      "spore-print-color_b : 0.074371\n",
+      "spore-print-color_h : -0.490229\n",
+      "spore-print-color_k : 0.396832\n",
+      "spore-print-color_n : 0.416645\n",
+      "spore-print-color_o : 0.074371\n",
+      "spore-print-color_r : -0.098024\n",
+      "spore-print-color_u : 0.074371\n",
+      "spore-print-color_w : -0.357384\n",
+      "spore-print-color_y : 0.074371\n",
+      "population_a : 0.214871\n",
+      "population_c : 0.137645\n",
+      "population_n : 0.219529\n",
+      "population_s : 0.159572\n",
+      "population_v : -0.443722\n",
+      "population_y : 0.107055\n",
+      "habitat_d : 0.126123\n",
+      "habitat_g : 0.165004\n",
+      "habitat_l : -0.155150\n",
+      "habitat_m : 0.138627\n",
+      "habitat_p : -0.323346\n",
+      "habitat_u : -0.112078\n",
+      "habitat_w : 0.150087\n"
+     ]
+    }
+   ],
+   "source": [
+    "columns = list(df.columns.values)\n",
+    "correlations = {}\n",
+    "for column in columns:\n",
+    "    corr = df[column].corr(result)\n",
+    "    correlations.update({column:corr})\n",
+    "for key, value in correlations.items():\n",
+    "    print(\"%s : %f\" % (key, value))\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "The accuracy is 0.959626\n"
+     ]
+    }
+   ],
+   "source": [
+    "import sklearn.linear_model\n",
+    "import sklearn.metrics \n",
+    "\n",
+    "#divide data half for training and half for testing\n",
+    "linear_data = df\n",
+    "size = int(linear_data.shape[0]/2)\n",
+    "train_features = linear_data[:4062]\n",
+    "train_result = result[:4062]\n",
+    "test_features = linear_data[4062:]\n",
+    "test_result = result[4062:]\n",
+    "\n",
+    "#perform linear regression test\n",
+    "regr = sklearn.linear_model.LinearRegression()\n",
+    "regr.fit(train_features, train_result)\n",
+    "yts_hat = regr.predict(test_features)\n",
+    "def convert_result(yhat):\n",
+    "    enumerated = []\n",
+    "    for num in yhat:\n",
+    "        ##.5 is chosen simply because its the average of 1 and 0 \n",
+    "        if(num >=.5):\n",
+    "            enumerated.append(1)\n",
+    "        else:\n",
+    "            enumerated.append(0)\n",
+    "    return enumerated\n",
+    "\n",
+    "#convert result to 1 and 0 \n",
+    "enumerated = convert_result(yts_hat)\n",
+    "\n",
+    "#RSS = np.mean((enumerated-test_result)**2)/(np.std(test_result)**2)\n",
+    "\n",
+    "MSE = sklearn.metrics.mean_squared_error(enumerated, test_result)\n",
+    "accuracy = sklearn.metrics.accuracy_score(enumerated, test_result)\n",
+    "print(\"The accuracy is %f\" % accuracy)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Current iteration is # 1, the accuracy is 100.000000\n",
+      "Current iteration is # 2, the accuracy is 100.000000\n",
+      "Current iteration is # 3, the accuracy is 100.000000\n",
+      "Current iteration is # 4, the accuracy is 100.000000\n",
+      "Current iteration is # 5, the accuracy is 100.000000\n",
+      "Current iteration is # 6, the accuracy is 100.000000\n",
+      "Current iteration is # 7, the accuracy is 100.000000\n",
+      "Current iteration is # 8, the accuracy is 100.000000\n",
+      "Current iteration is # 9, the accuracy is 100.000000\n",
+      "Current iteration is # 10, the accuracy is 100.000000\n",
+      "Current iteration is # 11, the accuracy is 100.000000\n",
+      "Current iteration is # 12, the accuracy is 100.000000\n",
+      "The average accuracy is 100.000000\n"
+     ]
+    }
+   ],
+   "source": [
+    "#k-fold test\n",
+    "from sklearn.model_selection import KFold\n",
+    "from sklearn.model_selection import cross_val_score\n",
+    "from sklearn import preprocessing\n",
+    "\n",
+    "kfold_data = df\n",
+    "#12 fold in this case\n",
+    "kf = KFold(n_splits=12, shuffle = True)\n",
+    "processed_data = preprocessing.scale(kfold_data)\n",
+    "accuracy = []\n",
+    "current_iteration = 1\n",
+    "for tr_index, ts_index in kf.split(processed_data):\n",
+    "    train_features, test_features = processed_data[tr_index], processed_data[ts_index]\n",
+    "    train_result, test_result = result[tr_index], result[ts_index]\n",
+    "    kfold_regr = sklearn.linear_model.LinearRegression()\n",
+    "    kfold_regr.fit(train_features, train_result)\n",
+    "    yts_hat = kfold_regr.predict(test_features)\n",
+    "    enumerated = convert_result(yts_hat)\n",
+    "    accuracy = sklearn.metrics.accuracy_score(enumerated, test_result) * 100\n",
+    "    print(\"Current iteration is # %d, the accuracy is %f\" % (current_iteration, accuracy))\n",
+    "    current_iteration +=1\n",
+    "    #RSS = np.mean((enumerated-test_result)**2)/(np.std(test_result)**2)\n",
+    "    #print(sklearn.metrics.accuracy_score(enumerated, test_result))\n",
+    "print(\"The average accuracy is %f\" % np.mean(accuracy))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/sklearn/linear_model/stochastic_gradient.py:128: FutureWarning: max_iter and tol parameters have been added in <class 'sklearn.linear_model.perceptron.Perceptron'> in 0.19. If both are left unset, they default to max_iter=5 and tol=None. If tol is not None, max_iter defaults to max_iter=1000. From 0.21, default max_iter will be 1000, and default tol will be 1e-3.\n",
+      "  \"and default tol will be 1e-3.\" % type(self), FutureWarning)\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "0.9276218611521418"
+      ]
+     },
+     "execution_count": 10,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "#using perceptron for binary classification \n",
+    "from sklearn.linear_model import Perceptron\n",
+    "\n",
+    "clf = Perceptron()\n",
+    "data = df\n",
+    "size = int(data.shape[0]/2)\n",
+    "train_features = data[:4062]\n",
+    "train_result = result[:4062]\n",
+    "test_features = data[4062:]\n",
+    "test_result = result[4062:]\n",
+    "clf.fit(train_features, train_result)\n",
+    "yts_hat = clf.predict(test_features)\n",
+    "clf.score(test_features, test_result)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.0"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
